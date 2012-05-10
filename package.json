@@ -9,7 +9,7 @@
     "url": "git://github.com/dawanda/jquery-plugin-skeleton.git"
   },
   "scripts": {
-    "test": "java -jar dist/compiler.jar src/*.js --js_output_file=dist/`pwd|sed -e 's/.*jquery\.//'`.min.js && node_modules/.bin/buster-test"
+    "test": "java -jar dist/compiler.jar src/*.js --js_output_file=dist/`pwd|sed -e 's/.*jquery\\.//'`.min.js && node_modules/.bin/buster-test"
   },
   "dependencies": {
     "buster": "~0.5.0"
