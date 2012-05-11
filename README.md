@@ -18,3 +18,4 @@ A skeleton for a jquery plugin with BusterJS for testing and Google Closure Comp
 ## License
 
 Hereby place under MIT license.
+
