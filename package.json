@@ -2,7 +2,7 @@
   "author": "Sascha Depold <sascha@dawanda.com> (http://depold.com)",
   "name": "jquery.skeleton",
   "description": "A skeleton for a jquery plugin with BusterJS for testing and Google Closure Compiler for minification.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "https://github.com/dawanda/jquery.skeleton",
   "repository": {
     "type": "git",
