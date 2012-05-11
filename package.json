@@ -12,7 +12,9 @@
     "test": "java -jar dist/compiler.jar src/*.js --js_output_file=dist/`pwd|sed -e 's/.*jquery\\.//'`.min.js && node_modules/.bin/buster-test"
   },
   "dependencies": {
-    "buster": "~0.5.0"
+    "buster": "~0.5.0",
+    "commander": "~0.6.0",
+    "fs.extra": "~1.0.1"
   },
   "devDependencies": {},
   "optionalDependencies": {},
