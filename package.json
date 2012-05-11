@@ -3,10 +3,10 @@
   "name": "jquery-plugin-skeleton",
   "description": "A skeleton for a jquery plugin with BusterJS for testing and Google Closure Compiler for minification.",
   "version": "0.0.0",
-  "homepage": "https://github.com/dawanda/jquery-plugin-skeleton",
+  "homepage": "https://github.com/dawanda/jquery.skeleton",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dawanda/jquery-plugin-skeleton.git"
+    "url": "git://github.com/dawanda/jquery.skeleton.git"
   },
   "scripts": {
     "test": "java -jar dist/compiler.jar src/*.js --js_output_file=dist/`pwd|sed -e 's/.*jquery\\.//'`.min.js && node_modules/.bin/buster-test"
