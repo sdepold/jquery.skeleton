@@ -51,12 +51,13 @@ var replaceSkeletonInFile = function(file) {
 }
 
 var addTestCommandToPackageFile = function() {
-  var packageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
+  var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
+    , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
 
-  packageContent.scripts = packageContent.scripts || {}
-  packageContent.scripts.test = "java -jar dist/compiler.jar src/*.js --js_output_file=dist/`pwd|sed -e 's/.*jquery\.//'`.min.js && node_modules/.bin/buster-test"
+  targetPackageContent.scripts = targetPackageContent.scripts || {}
+  targetPackageContent.scripts.test = sourcePackageContent.scripts.test
 
-  fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(packageContent, null, 2))
+  fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
 }
 
 var addTravisConfig = function() {
