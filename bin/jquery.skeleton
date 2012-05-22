@@ -60,6 +60,16 @@ var addTestCommandToPackageFile = function() {
   fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
 }
 
+var addBusterJsDependencyToPackageFile = function() {
+  var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
+    , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
+
+  targetPackageContent.dependencies = targetPackageContent.dependencies || {}
+  targetPackageContent.dependencies.buster = sourcePackageContent.dependencies.buster
+
+  fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
+}
+
 var addTravisConfig = function() {
   var packageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
     , travisContent  = fs.readFileSync(process.cwd() + '/.travis.yml').toString()
@@ -100,4 +110,5 @@ if(program.init) {
   })
 
   addTestCommandToPackageFile()
+  addBusterJsDependencyToPackageFile()
 }
