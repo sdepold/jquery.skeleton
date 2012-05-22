@@ -11,6 +11,7 @@ const path    = require("path")
 program
   .version(version)
   .option('-i, --init', "Initializes the current project folder. You'll get TDD, minification, folder structure, ...")
+  .option('-u, --update', "Update some parts of the current project folder.")
   .parse(process.argv)
 
 var createFolder = function(path) {
@@ -109,6 +110,11 @@ if(program.init) {
     addTravisConfig()
   })
 
+  addTestCommandToPackageFile()
+  addBusterJsDependencyToPackageFile()
+}
+
+if(program.update) {
   addTestCommandToPackageFile()
   addBusterJsDependencyToPackageFile()
 }
