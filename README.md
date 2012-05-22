@@ -12,7 +12,8 @@ A skeleton builder for jquery plugins. Included is BusterJS for testing and Goog
   - npm init
 - Add `jquery.skeleton` to your package.json.
   - npm install jquery.skeleton --save
-- Execute `node_modules/.bin/jquery.skeleton --init` and let the magic happen.
+- Execute the init process and let the magic happen.
+  - node_modules/.bin/jquery.skeleton --init
 - Start coding!
 
 ## Test driven development
@@ -26,6 +27,11 @@ commands, you will get access to [BusterJS](http://busterjs.org/). Here is how t
   - firefox http://localhost:1111/capture
 - Minify the code in the src folder and run the tests:
   - npm test
+
+## Update current project
+- Update your `jquery.skeleton` to the latest version of jquery.skeleton.
+- Update your project:
+  - node_modules/.bin/jquery.skeleton --update
 
 ## License
 
