@@ -97,6 +97,8 @@ var addLicense = function() {
     readme = ""
   }
 
+  console.log(readme, readme.indexOf('## License') === -1)
+
   if(readme.indexOf('## License') === -1) {
     readme += "\n\n## License\n\nHereby place under MIT license."
     console.log(readme)
