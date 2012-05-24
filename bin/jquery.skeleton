@@ -88,7 +88,7 @@ var addTravisConfig = function() {
 }
 
 var addLicense = function() {
-  var readmePath = process.cwd() + 'README.md'
+  var readmePath = process.cwd() + '/README.md'
     , readme     = null
 
   try {
@@ -97,11 +97,8 @@ var addLicense = function() {
     readme = ""
   }
 
-  console.log(readme, readme.indexOf('## License') === -1)
-
   if(readme.indexOf('## License') === -1) {
-    readme += "\n\n## License\n\nHereby place under MIT license."
-    console.log(readme)
+    readme += "\n## License\n\nHereby place under MIT license."
     fs.writeFileSync(readmePath, readme)
   }
 }
