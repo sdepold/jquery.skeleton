@@ -12,6 +12,7 @@ program
   .version(version)
   .option('-i, --init', "Initializes the current project folder. You'll get TDD, minification, folder structure, ...")
   .option('-u, --update', "Update some parts of the current project folder.")
+  .option('-l, --license', "Add the MIT license to the project folder and the README.")
   .parse(process.argv)
 
 var createFolder = function(path) {
@@ -86,6 +87,23 @@ var addTravisConfig = function() {
   fs.writeFileSync(process.cwd() + '/.travis.yml', travisContent)
 }
 
+var addLicense = function() {
+  var readmePath = process.cwd() + 'README.md'
+    , readme     = null
+
+  try {
+    readme = fs.readFileSync(readmePath)
+  } catch(e) {
+    readme = ""
+
+  }
+
+  if(readme.indexOf('## License') === -1) {
+    readme += "## License\n\nHereby place under MIT license."
+    fs.writeFileSync(readmePath, readme)
+  }
+}
+
 if(program.init) {
   createFolder(process.cwd() + '/dist')
   createFolder(process.cwd() + '/lib')
@@ -117,4 +135,9 @@ if(program.init) {
 if(program.update) {
   addTestCommandToPackageFile()
   addBusterJsDependencyToPackageFile()
+}
+
+if(program.license) {
+  copyFile(__dirname + '/../MIT-LICENSE', process.cwd() + '/MIT-LICENSE')
+  addLicense()
 }
