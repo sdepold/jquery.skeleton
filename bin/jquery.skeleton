@@ -92,7 +92,7 @@ var addLicense = function() {
     , readme     = null
 
   try {
-    readme = fs.readFileSync(readmePath)
+    readme = fs.readFileSync(readmePath).toString()
   } catch(e) {
     readme = ""
   }
