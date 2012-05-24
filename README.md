@@ -33,6 +33,12 @@ commands, you will get access to [BusterJS](http://busterjs.org/). Here is how t
 - Update your project:
   - node_modules/.bin/jquery.skeleton --update
 
+## Adding the MIT license to the project
+- node_modules/.bin/jquery.skeleton --license
+
+## Overview of available commands
+- node_modules/.bin/jquery.skeleton --help
+
 ## License
 
 Hereby place under MIT license.
