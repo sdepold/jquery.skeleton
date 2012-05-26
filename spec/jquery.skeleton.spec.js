@@ -92,26 +92,41 @@ describe('jquery.skeleton.spec', function() {
 
       describe('spec file', function() {
         before(function() {
-          this.specFilename = this.sandboxFolder + '/spec/' + this.sandboxFolderName + '.spec.js'
+          this.filePath = this.sandboxFolder + '/spec/' + this.sandboxFolderName + '.spec.js'
         })
 
         it("adds a dummy spec file", function() {
-          expect(path.existsSync(this.specFilename)).toBeTrue()
+          expect(path.existsSync(this.filePath)).toBeTrue()
         })
 
         it("removes all occurrences of jquery.skeleton", function() {
-          var specContent = fs.readFileSync(this.specFilename).toString()
+          var specContent = fs.readFileSync(this.filePath).toString()
           expect(specContent.indexOf('jquery.skeleton')).toEqual(-1)
+        })
+
+        it("adds the project name", function() {
+          var specContent = fs.readFileSync(this.filePath).toString()
+          expect(specContent.indexOf(this.sandboxFolderName)).not.toEqual(-1)
         })
       })
 
       describe('spec file', function() {
         before(function() {
-          this.srcFilename = this.sandboxFolder + '/src/' + this.sandboxFolderName + '.js'
+          this.filePath = this.sandboxFolder + '/src/' + this.sandboxFolderName + '.js'
         })
 
         it("adds a dummy src file", function() {
-          expect(path.existsSync(this.srcFilename)).toBeTrue()
+          expect(path.existsSync(this.filePath)).toBeTrue()
+        })
+
+        it("removes all occurrences of jquery.skeleton", function() {
+          var specContent = fs.readFileSync(this.filePath).toString()
+          expect(specContent.indexOf('jquery.skeleton')).toEqual(-1)
+        })
+
+        it("adds the project name", function() {
+          var specContent = fs.readFileSync(this.filePath).toString()
+          expect(specContent.indexOf(this.sandboxFolderName.replace('jquery.', '$.fn.'))).not.toEqual(-1)
         })
       })
     })
