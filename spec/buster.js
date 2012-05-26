@@ -1,15 +1,7 @@
 var config = module.exports
 
-config["browser tests"] = {
+config["node tests"] = {
   rootPath: '../',
-  tests: [
-    "spec/*.spec.js"
-  ],
-  environment: 'browser',
-  libs: [
-    "lib/jquery-1.7.2.min.js"
-  ],
-  sources: [
-    'dist/*.min.js'
-  ]
+  tests: [ "spec/*.spec.js" ],
+  environment: 'node'
 }
