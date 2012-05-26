@@ -74,6 +74,14 @@ describe('jquery.skeleton.spec', function() {
         expect(packageJSON.dependencies.buster).toBeDefined()
       })
 
+      it("sets the test command in the package.json", function() {
+        var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
+          , packageJSON    = JSON.parse(packageContent)
+
+        expect(packageJSON.scripts.test).toMatch(/.*compiler\.jar.*buster-test/)
+        expect(packageJSON.scripts.test.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
+      })
+
       it("adds the buster.js to the spec folder", function() {
         expect(path.existsSync(this.sandboxFolder + '/spec/buster.js')).toBeTrue()
       })
