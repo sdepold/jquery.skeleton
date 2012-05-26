@@ -109,17 +109,19 @@ if(program.init) {
   createFolder(process.cwd() + '/spec')
   createFolder(process.cwd() + '/src')
 
-  var files = ['dist/compiler.jar', 'lib/jquery-1.7.2.min.js', 'spec/buster.js']
+  var files = ['dist/compiler.jar', 'lib/jquery-1.7.2.min.js']
 
   files.forEach(function(file) {
     copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
   })
 
-  copyFile(__dirname + '/../spec/jquery.skeleton.spec.js', process.cwd() + '/spec/jquery.' + getTargetProjectName() + '.spec.js', function() {
+  copyFile(__dirname + '/../templates/spec/buster.js', process.cwd() + '/spec/buster.js')
+
+  copyFile(__dirname + '/../templates/spec/jquery.skeleton.spec.js', process.cwd() + '/spec/jquery.' + getTargetProjectName() + '.spec.js', function() {
     replaceSkeletonInFile(process.cwd() + '/spec/jquery.' + getTargetProjectName() + '.spec.js')
   })
 
-  copyFile(__dirname + '/../src/jquery.skeleton.js', process.cwd() + '/src/jquery.' + getTargetProjectName() + '.js', function() {
+  copyFile(__dirname + '/../templates/src/jquery.skeleton.js', process.cwd() + '/src/jquery.' + getTargetProjectName() + '.js', function() {
     replaceSkeletonInFile(process.cwd() + '/src/jquery.' + getTargetProjectName() + '.js')
   })
 
