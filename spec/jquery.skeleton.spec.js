@@ -40,6 +40,7 @@ describe('jquery.skeleton.spec', function() {
 
         this.timeout = 1000
 
+
         execBinaryCommand('--init', this.sandboxFolder, function(err, stdout, stderr) {
           self.err    = err
           self.stdout = stdout
