@@ -4,6 +4,7 @@ const buster = require("buster")
     , exec   = require("child_process").exec
     , wrench = require("wrench")
 
+buster.testRunner.timeout = 1000
 buster.spec.expose()
 
 var execBinaryCommand = function(cmd, path, callback) {
@@ -37,9 +38,6 @@ describe('jquery.skeleton.spec', function() {
     describe('init', function() {
       before(function(done) {
         var self = this
-
-        this.timeout = 1000
-
 
         execBinaryCommand('--init', this.sandboxFolder, function(err, stdout, stderr) {
           self.err    = err
