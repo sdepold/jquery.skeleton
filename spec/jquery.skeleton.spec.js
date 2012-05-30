@@ -193,8 +193,6 @@ describe('jquery.skeleton', function() {
 
         expect(readme.indexOf('## License')).not.toEqual(-1)
         expect(readme.indexOf('Hereby placed under MIT license.')).not.toEqual(-1)
-
-
       })
     })
   })
