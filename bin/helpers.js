@@ -1,12 +1,37 @@
 const path    = require("path")
+    , http    = require("http")
     , fs      = require("fs.extra")
     , program = require("commander")
     , version = JSON.parse(fs.readFileSync(__dirname + '/../package.json')).version
     , exec    = require('child_process').exec
     , _       = require("underscore")
     , _s      = require("underscore.string")
+    , AdmZip  = require('adm-zip')
+
 
 var Helpers = module.exports = {
+  downloadClosureCompiler: function(path, callback) {
+    var file = fs.createWriteStream(path + '/compiler-latest.zip')
+
+    http.get({
+      host: 'closure-compiler.googlecode.com',
+      port: 80,
+      path: '/files/compiler-latest.zip'
+    }, function(res) {
+      res.on('data', function(data) {
+        file.write(data)
+      }).on('end', function() {
+        file.end()
+        callback && callback()
+      })
+    })
+  },
+
+  unzipClosureCompiler: function(path) {
+    var zip = new AdmZip(path + '/compiler-latest.zip')
+    // zip.extractEntryTo('compiler.jar', path, true)
+  },
+
   createFolder: function(path) {
     try {
       fs.mkdirSync(path)
