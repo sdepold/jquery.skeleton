@@ -176,6 +176,24 @@ describe('jquery.skeleton', function() {
           , packageJSON    = JSON.parse(packageContent)
 
         expect(packageJSON.dependencies.buster).toBeDefined()
+      })
+    })
+
+    describe('license', function() {
+      before(function(done) {
+        execBinaryCommand.call(this, '--init --license', done)
+      })
+
+      it("adds the MIT-LICENSE file", function() {
+        expect(path.existsSync(this.sandboxFolder + '/MIT-LICENSE')).toBeTrue()
+      })
+
+      it("adds a hint for the MIT license to the readme", function() {
+        var readme = fs.readFileSync(this.sandboxFolder + '/README.md').toString()
+
+        expect(readme.indexOf('## License')).not.toEqual(-1)
+        expect(readme.indexOf('Hereby placed under MIT license.')).not.toEqual(-1)
+
 
       })
     })
