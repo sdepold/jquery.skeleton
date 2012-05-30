@@ -22,24 +22,37 @@ if(program.init) {
   Helpers.createFolder(process.cwd() + '/spec')
   Helpers.createFolder(process.cwd() + '/src')
 
-  var files = ['dist/compiler.jar', 'lib/jquery-1.7.2.min.js']
+  var files = [
+    'dist/compiler.jar',
+    'lib/jquery-1.7.2.min.js',
+    {
+      src: 'templates/spec/buster.js',
+      target: 'spec/buster.js'
+    }, {
+      src: 'templates/spec/jquery.skeleton.spec.js',
+      target: 'spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js',
+      callback: function() {
+        Helpers.replaceSkeletonInFile(process.cwd() + '/spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js')
+      }
+    }, {
+      src: 'templates/src/jquery.skeleton.js',
+      target: 'src/jquery.' + Helpers.getTargetProjectName() + '.js',
+      callback: function() {
+        Helpers.replaceSkeletonInFile(process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + '.js')
+      }
+    }, {
+      src: '.travis.yml',
+      target: '.travis.yml',
+      callback: Helpers.addTravisConfig
+    }
+  ]
 
   files.forEach(function(file) {
-    Helpers.copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
-  })
-
-  Helpers.copyFile(__dirname + '/../templates/spec/buster.js', process.cwd() + '/spec/buster.js')
-
-  Helpers.copyFile(__dirname + '/../templates/spec/jquery.skeleton.spec.js', process.cwd() + '/spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js', function() {
-    Helpers.replaceSkeletonInFile(process.cwd() + '/spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js')
-  })
-
-  Helpers.copyFile(__dirname + '/../templates/src/jquery.skeleton.js', process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + '.js', function() {
-    Helpers.replaceSkeletonInFile(process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + '.js')
-  })
-
-  Helpers.copyFile(__dirname + '/../.travis.yml', process.cwd() + '/.travis.yml', function() {
-    Helpers.addTravisConfig()
+    if(typeof file === 'object') {
+      Helpers.copyFile(__dirname + '/../' + file.src, process.cwd() + '/' + file.target, file.callback)
+    } else {
+      Helpers.copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
+    }
   })
 
   Helpers.addTestCommandToPackageFile()
