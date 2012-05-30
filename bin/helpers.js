@@ -90,7 +90,7 @@ var Helpers = module.exports = {
     }
 
     if(readme.indexOf('## License') === -1) {
-      readme += "\n## License\n\nHereby place under MIT license."
+      readme += "\n## License\n\nHereby placed under MIT license."
       fs.writeFileSync(readmePath, readme)
     }
   }
