@@ -4,17 +4,32 @@ const path    = require("path")
     , fs      = require("fs.extra")
     , program = require("commander")
     , version = JSON.parse(fs.readFileSync(__dirname + '/../package.json')).version
-    , exec    = require('child_process').exec
     , Helpers = require("./helpers")
-    , _       = require("underscore")
-    , _s      = require("underscore.string")
+    , wrench  = require("wrench")
 
 program
   .version(version)
   .option('-i, --init', "Initializes the current project folder. You'll get TDD, minification, folder structure, ...")
   .option('-u, --update', "Update some parts of the current project folder.")
   .option('-l, --license', "Add the MIT license to the project folder and the README.")
+  .option('-f, --foo', 'debug')
   .parse(process.argv)
+
+if(program.foo) {
+  var folder = process.cwd() + '/tmp'
+
+  Helpers.createFolder(folder)
+
+  Helpers.downloadClosureCompiler(folder, function() {
+    Helpers.unzipClosureCompiler(folder)
+
+    fs.unlinkSync(process.cwd() + '/dist/compiler.jar')
+
+    Helpers.copyFile(folder + '/compiler.jar', process.cwd() + '/dist/compiler.jar', function() {
+      // wrench.rmdirSyncRecursive(folder)
+    })
+  })
+}
 
 if(program.init) {
   Helpers.createFolder(process.cwd() + '/dist')
