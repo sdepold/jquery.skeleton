@@ -148,27 +148,35 @@ describe('jquery.skeleton', function() {
 
     describe('update', function() {
       before(function(done) {
-        execBinaryCommand.call(this, '--init', done)
+        var self = this
+
+        execBinaryCommand.call(this, '--init', function() {
+          var packageContent = fs.readFileSync(self.sandboxFolder + '/package.json').toString()
+            , packageJSON    = JSON.parse(packageContent)
+
+          delete packageJSON.dependencies.buster
+          packageJSON.scripts.test = 'foo'
+
+          fs.writeFileSync(self.sandboxFolder + '/package.json', JSON.stringify(packageJSON))
+
+          execBinaryCommand.call(self, '--update', done)
+        })
       })
 
-      it("sets the test command in package.json", function(done) {
+      it("sets the test command in package.json", function() {
         var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
           , packageJSON    = JSON.parse(packageContent)
-          , self           = this
 
-        packageJSON.scripts.test = 'foo'
+        expect(packageJSON.scripts.test).toMatch(/.*compiler\.jar.*buster-test/)
+        expect(packageJSON.scripts.test.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
+      })
 
-        fs.writeFileSync(this.sandboxFolder + '/package.json', JSON.stringify(packageJSON))
+      it("adds buster to the dependency list", function() {
+        var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
+          , packageJSON    = JSON.parse(packageContent)
 
-        execBinaryCommand.call(this, '--update', function() {
-          packageContent = fs.readFileSync(self.sandboxFolder + '/package.json').toString()
-          packageJSON    = JSON.parse(packageContent)
+        expect(packageJSON.dependencies.buster).toBeDefined()
 
-          expect(packageJSON.scripts.test).toMatch(/.*compiler\.jar.*buster-test/)
-          expect(packageJSON.scripts.test.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
-
-          done()
-        })
       })
     })
   })
