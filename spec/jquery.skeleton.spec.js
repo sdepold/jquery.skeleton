@@ -21,7 +21,7 @@ var copyFile = function(src, dest, callback) {
   })
 }
 
-describe('jquery.skeleton.spec', function() {
+describe('jquery.skeleton', function() {
   describe('binary', function() {
     before(function(done) {
       this.sandboxFolderName = 'jquery.' + (+new Date())
