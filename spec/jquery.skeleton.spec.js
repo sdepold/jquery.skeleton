@@ -7,8 +7,18 @@ const buster = require("buster")
 buster.testRunner.timeout = 1000
 buster.spec.expose()
 
-var execBinaryCommand = function(cmd, path, callback) {
-  exec(__dirname + '/../bin/jquery.skeleton ' + cmd, { cwd: path }, callback)
+var execBinaryCommand = function(cmd, callback) {
+  var self = this
+
+  exec(__dirname + '/../bin/jquery.skeleton ' + cmd, {
+    cwd: this.sandboxFolder
+  }, function(err, stdout, stderr) {
+    self.err    = err
+    self.stdout = stdout
+    self.stderr = stderr
+
+    callback && callback()
+  })
 }
 
 var copyFile = function(src, dest, callback) {
@@ -19,6 +29,10 @@ var copyFile = function(src, dest, callback) {
       callback && callback()
     }
   })
+}
+
+var update = function(callback) {
+  var self = this
 }
 
 describe('jquery.skeleton', function() {
@@ -37,15 +51,7 @@ describe('jquery.skeleton', function() {
 
     describe('init', function() {
       before(function(done) {
-        var self = this
-
-        execBinaryCommand('--init', this.sandboxFolder, function(err, stdout, stderr) {
-          self.err    = err
-          self.stdout = stdout
-          self.stderr = stderr
-
-          done()
-        })
+        execBinaryCommand.call(this, '--init', done)
       })
 
       it("doesn't throw an error", function() {
@@ -136,6 +142,32 @@ describe('jquery.skeleton', function() {
         it("adds the project name", function() {
           var specContent = fs.readFileSync(this.filePath).toString()
           expect(specContent.indexOf(this.sandboxFolderName.replace('jquery.', '$.fn.'))).not.toEqual(-1)
+        })
+      })
+    })
+
+    describe('update', function() {
+      before(function(done) {
+        execBinaryCommand.call(this, '--init', done)
+      })
+
+      it("sets the test command in package.json", function(done) {
+        var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
+          , packageJSON    = JSON.parse(packageContent)
+          , self           = this
+
+        packageJSON.scripts.test = 'foo'
+
+        fs.writeFileSync(this.sandboxFolder + '/package.json', JSON.stringify(packageJSON))
+
+        execBinaryCommand.call(this, '--update', function() {
+          packageContent = fs.readFileSync(self.sandboxFolder + '/package.json').toString()
+          packageJSON    = JSON.parse(packageContent)
+
+          expect(packageJSON.scripts.test).toMatch(/.*compiler\.jar.*buster-test/)
+          expect(packageJSON.scripts.test.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
+
+          done()
         })
       })
     })
