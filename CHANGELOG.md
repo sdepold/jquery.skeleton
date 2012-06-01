@@ -1,3 +1,6 @@
+# 0.4.1 #
+- [REFACTORING] transformed option use into command use
+
 # 0.4.0 #
 - [REFACTORING] moved templates into templates folder
 - [SPEC] added specs for every command
