@@ -4,7 +4,7 @@ const buster = require("buster")
     , exec   = require("child_process").exec
     , wrench = require("wrench")
 
-buster.testRunner.timeout = 1000
+buster.testRunner.timeout = 10000
 buster.spec.expose()
 
 var execBinaryCommand = function(cmd, callback) {
@@ -51,7 +51,7 @@ describe('jquery.skeleton', function() {
 
     describe('init', function() {
       before(function(done) {
-        execBinaryCommand.call(this, '--init', done)
+        execBinaryCommand.call(this, 'init', done)
       })
 
       it("doesn't throw an error", function() {
@@ -150,7 +150,7 @@ describe('jquery.skeleton', function() {
       before(function(done) {
         var self = this
 
-        execBinaryCommand.call(this, '--init', function() {
+        execBinaryCommand.call(this, 'init', function() {
           var packageContent = fs.readFileSync(self.sandboxFolder + '/package.json').toString()
             , packageJSON    = JSON.parse(packageContent)
 
@@ -159,7 +159,7 @@ describe('jquery.skeleton', function() {
 
           fs.writeFileSync(self.sandboxFolder + '/package.json', JSON.stringify(packageJSON))
 
-          execBinaryCommand.call(self, '--update', done)
+          execBinaryCommand.call(self, 'update', done)
         })
       })
 
@@ -181,7 +181,7 @@ describe('jquery.skeleton', function() {
 
     describe('license', function() {
       before(function(done) {
-        execBinaryCommand.call(this, '--init --license', done)
+        execBinaryCommand.call(this, 'init --license', done)
       })
 
       it("adds the MIT-LICENSE file", function() {

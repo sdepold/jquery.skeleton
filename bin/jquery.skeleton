@@ -6,80 +6,82 @@ const path    = require("path")
     , version = JSON.parse(fs.readFileSync(__dirname + '/../package.json')).version
     , Helpers = require("./helpers")
     , wrench  = require("wrench")
+    , exec    = require('child_process').exec
+
+program.version(version)
 
 program
-  .version(version)
-  .option('-i, --init', "Initializes the current project folder. You'll get TDD, minification, folder structure, ...")
-  .option('-u, --update', "Update some parts of the current project folder.")
+  .command('init')
+  .description("Initializes the current project folder. You'll get TDD, minification, folder structure, ...")
   .option('-l, --license', "Add the MIT license to the project folder and the README.")
-  .option('-f, --foo', 'debug')
-  .parse(process.argv)
+  .action(function(env) {
+    var folders = ['dist', 'lib', 'spec', 'src']
 
-if(program.foo) {
-  var folder = process.cwd() + '/tmp'
+    var files = [
+      'lib/jquery-1.7.2.min.js',
+      {
+        src: 'templates/spec/buster.js',
+        target: 'spec/buster.js'
+      }, {
+        src: 'templates/spec/jquery.skeleton.spec.js',
+        target: 'spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js',
+        callback: function() {
+          Helpers.replaceSkeletonInFile(process.cwd() + '/spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js')
+        }
+      }, {
+        src: 'templates/src/jquery.skeleton.js',
+        target: 'src/jquery.' + Helpers.getTargetProjectName() + '.js',
+        callback: function() {
+          Helpers.replaceSkeletonInFile(process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + '.js')
+        }
+      }, {
+        src: '.travis.yml',
+        target: '.travis.yml',
+        callback: Helpers.addTravisConfig
+      }
+    ]
 
-  Helpers.createFolder(folder)
-
-  Helpers.downloadClosureCompiler(folder, function() {
-    Helpers.unzipClosureCompiler(folder)
-
-    fs.unlinkSync(process.cwd() + '/dist/compiler.jar')
-
-    Helpers.copyFile(folder + '/compiler.jar', process.cwd() + '/dist/compiler.jar', function() {
-      // wrench.rmdirSyncRecursive(folder)
+    folders.forEach(function(folder) {
+      Helpers.createFolder(process.cwd() + '/' + folder)
     })
-  })
-}
 
-if(program.init) {
-  Helpers.createFolder(process.cwd() + '/dist')
-  Helpers.createFolder(process.cwd() + '/lib')
-  Helpers.createFolder(process.cwd() + '/spec')
-  Helpers.createFolder(process.cwd() + '/src')
+    Helpers.ClosureCompiler.setup(function() {
+      files.forEach(function(file) {
+        if(typeof file === 'object') {
+          Helpers.copyFile(__dirname + '/../' + file.src, process.cwd() + '/' + file.target, file.callback)
+        } else {
+          Helpers.copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
+        }
+      })
 
-  var files = [
-    'dist/compiler.jar',
-    'lib/jquery-1.7.2.min.js',
-    {
-      src: 'templates/spec/buster.js',
-      target: 'spec/buster.js'
-    }, {
-      src: 'templates/spec/jquery.skeleton.spec.js',
-      target: 'spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js',
-      callback: function() {
-        Helpers.replaceSkeletonInFile(process.cwd() + '/spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js')
+      Helpers.addTestCommandToPackageFile()
+      Helpers.addBusterJsDependencyToPackageFile()
+
+      if(env.license) {
+        Helpers.License.setup()
       }
-    }, {
-      src: 'templates/src/jquery.skeleton.js',
-      target: 'src/jquery.' + Helpers.getTargetProjectName() + '.js',
-      callback: function() {
-        Helpers.replaceSkeletonInFile(process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + '.js')
-      }
-    }, {
-      src: '.travis.yml',
-      target: '.travis.yml',
-      callback: Helpers.addTravisConfig
-    }
-  ]
+    })
 
-  files.forEach(function(file) {
-    if(typeof file === 'object') {
-      Helpers.copyFile(__dirname + '/../' + file.src, process.cwd() + '/' + file.target, file.callback)
-    } else {
-      Helpers.copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
-    }
   })
 
-  Helpers.addTestCommandToPackageFile()
-  Helpers.addBusterJsDependencyToPackageFile()
+program
+  .command('update')
+  .description("Update some parts of the current project folder. (package.json, closure compiler)")
+  .action(function(env, options) {
+    // Helpers.ClosureCompiler.setup()
+    Helpers.addTestCommandToPackageFile()
+    Helpers.addBusterJsDependencyToPackageFile()
+  })
+
+program
+  .command('license')
+  .description("Add the MIT license to the project folder and the README.")
+  .action(function(env, options) {
+    Helpers.License.setup()
+  })
+
+if(process.argv.length <= 2) {
+  program.help()
 }
 
-if(program.update) {
-  Helpers.addTestCommandToPackageFile()
-  Helpers.addBusterJsDependencyToPackageFile()
-}
-
-if(program.license) {
-  Helpers.copyFile(__dirname + '/../MIT-LICENSE', process.cwd() + '/MIT-LICENSE')
-  Helpers.addLicense()
-}
+program.parse(process.argv)
