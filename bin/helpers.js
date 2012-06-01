@@ -9,51 +9,6 @@ const path    = require("path")
     , wrench  = require("wrench")
 
 var Helpers = module.exports = {
-  ClosureCompiler: {
-    setup: function(callback) {
-      var folder        = process.cwd() + '/tmp'
-        , zipFile       = folder + '/compiler-latest.zip'
-        , srcJarFile    = folder + '/compiler.jar'
-        , targetJarFile = process.cwd() + '/dist/compiler.jar'
-
-      Helpers.createFolder(folder)
-
-      Helpers.ClosureCompiler.download(zipFile, function() {
-        Helpers.deleteFile(targetJarFile)
-        Helpers.ClosureCompiler.unzip(zipFile, folder)
-
-        Helpers.copyFile(srcJarFile, targetJarFile, function() {
-          wrench.rmdirSyncRecursive(folder)
-          callback && callback()
-        })
-      })
-    },
-
-    download: function(target, callback) {
-      var file = fs.createWriteStream(target)
-
-      http.get({
-        host: 'closure-compiler.googlecode.com',
-        port: 80,
-        path: '/files/compiler-latest.zip'
-      }, function(res) {
-        res.on('data', function(data) {
-          file.write(data)
-        }).on('end', function() {
-          file.end()
-          callback && callback()
-        }).on('error', function(err) {
-          console.log('An error occurred while downloading the closure compiler:', err)
-        })
-      })
-    },
-
-    unzip: function(src, targetPath) {
-      var zip = new AdmZip(src)
-      zip.extractAllTo(targetPath, true)
-    }
-  },
-
   License: {
     setup: function() {
       Helpers.copyFile(__dirname + '/../MIT-LICENSE', process.cwd() + '/MIT-LICENSE')
