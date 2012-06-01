@@ -1,4 +1,4 @@
-# 0.4.1 #
+# 0.5.0 #
 - [REFACTORING] transformed option use into command use
 
 # 0.4.0 #
