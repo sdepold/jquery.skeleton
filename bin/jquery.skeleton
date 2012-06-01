@@ -16,10 +16,14 @@ program
   .option('-l, --license', "Add the MIT license to the project folder and the README.")
   .action(function(env) {
     var folders = ['dist', 'lib', 'spec', 'src']
-
-    var files = [
-      'lib/jquery-1.7.2.min.js',
+    var files   = [
       {
+        src: 'templates/lib/jquery-1.7.2.min.js',
+        target: 'lib/jquery-1.7.2.min.js'
+      }, {
+        src: 'templates/dist/compiler.jar',
+        target: 'dist/compiler.jar'
+      }, {
         src: 'templates/spec/buster.js',
         target: 'spec/buster.js'
       }, {
@@ -45,23 +49,20 @@ program
       Helpers.createFolder(process.cwd() + '/' + folder)
     })
 
-    Helpers.ClosureCompiler.setup(function() {
-      files.forEach(function(file) {
-        if(typeof file === 'object') {
-          Helpers.copyFile(__dirname + '/../' + file.src, process.cwd() + '/' + file.target, file.callback)
-        } else {
-          Helpers.copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
-        }
-      })
-
-      Helpers.addTestCommandToPackageFile()
-      Helpers.addBusterJsDependencyToPackageFile()
-
-      if(env.license) {
-        Helpers.License.setup()
+    files.forEach(function(file) {
+      if(typeof file === 'object') {
+        Helpers.copyFile(__dirname + '/../' + file.src, process.cwd() + '/' + file.target, file.callback)
+      } else {
+        Helpers.copyFile(__dirname + '/../' + file, process.cwd() + '/' + file)
       }
     })
 
+    Helpers.addTestCommandToPackageFile()
+    Helpers.addBusterJsDependencyToPackageFile()
+
+    if(env.license) {
+      Helpers.License.setup()
+    }
   })
 
 program
