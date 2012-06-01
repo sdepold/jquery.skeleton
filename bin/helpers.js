@@ -3,33 +3,84 @@ const path    = require("path")
     , fs      = require("fs.extra")
     , program = require("commander")
     , version = JSON.parse(fs.readFileSync(__dirname + '/../package.json')).version
-    , exec    = require('child_process').exec
     , _       = require("underscore")
     , _s      = require("underscore.string")
     , AdmZip  = require('adm-zip')
-
+    , wrench  = require("wrench")
 
 var Helpers = module.exports = {
-  downloadClosureCompiler: function(path, callback) {
-    var file = fs.createWriteStream(path + '/compiler-latest.zip')
+  ClosureCompiler: {
+    setup: function(callback) {
+      var folder        = process.cwd() + '/tmp'
+        , zipFile       = folder + '/compiler-latest.zip'
+        , srcJarFile    = folder + '/compiler.jar'
+        , targetJarFile = process.cwd() + '/dist/compiler.jar'
 
-    http.get({
-      host: 'closure-compiler.googlecode.com',
-      port: 80,
-      path: '/files/compiler-latest.zip'
-    }, function(res) {
-      res.on('data', function(data) {
-        file.write(data)
-      }).on('end', function() {
-        file.end()
-        callback && callback()
+      Helpers.createFolder(folder)
+
+      Helpers.ClosureCompiler.download(zipFile, function() {
+        Helpers.deleteFile(targetJarFile)
+        Helpers.ClosureCompiler.unzip(zipFile, folder)
+
+        Helpers.copyFile(srcJarFile, targetJarFile, function() {
+          wrench.rmdirSyncRecursive(folder)
+          callback && callback()
+        })
       })
-    })
+    },
+
+    download: function(target, callback) {
+      var file = fs.createWriteStream(target)
+
+      http.get({
+        host: 'closure-compiler.googlecode.com',
+        port: 80,
+        path: '/files/compiler-latest.zip'
+      }, function(res) {
+        res.on('data', function(data) {
+          file.write(data)
+        }).on('end', function() {
+          file.end()
+          callback && callback()
+        }).on('error', function(err) {
+          console.log('An error occurred while downloading the closure compiler:', err)
+        })
+      })
+    },
+
+    unzip: function(src, targetPath) {
+      var zip = new AdmZip(src)
+      zip.extractAllTo(targetPath, true)
+    }
   },
 
-  unzipClosureCompiler: function(path) {
-    var zip = new AdmZip(path + '/compiler-latest.zip')
-    // zip.extractEntryTo('compiler.jar', path, true)
+  License: {
+    setup: function() {
+      Helpers.copyFile(__dirname + '/../MIT-LICENSE', process.cwd() + '/MIT-LICENSE')
+      Helpers.License.add()
+    },
+
+    add: function() {
+      var readmePath = process.cwd() + '/README.md'
+        , readme     = null
+
+      try {
+        readme = fs.readFileSync(readmePath).toString()
+      } catch(e) {
+        readme = ""
+      }
+
+      if(readme.indexOf('## License') === -1) {
+        readme += "\n## License\n\nHereby placed under MIT license."
+        fs.writeFileSync(readmePath, readme)
+      }
+    }
+  },
+
+  deleteFile: function(file) {
+    try {
+      fs.unlinkSync(file)
+    } catch(e) {}
   },
 
   createFolder: function(path) {
@@ -102,21 +153,5 @@ var Helpers = module.exports = {
     }
 
     fs.writeFileSync(process.cwd() + '/.travis.yml', travisContent)
-  },
-
-  addLicense: function() {
-    var readmePath = process.cwd() + '/README.md'
-      , readme     = null
-
-    try {
-      readme = fs.readFileSync(readmePath).toString()
-    } catch(e) {
-      readme = ""
-    }
-
-    if(readme.indexOf('## License') === -1) {
-      readme += "\n## License\n\nHereby placed under MIT license."
-      fs.writeFileSync(readmePath, readme)
-    }
   }
 }
