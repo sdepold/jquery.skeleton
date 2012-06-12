@@ -29,28 +29,43 @@ node_modules/.bin/jquery.skeleton init
 
 # Start coding!
 ```
+
 ## Test driven development
 The major goal of the skeleton is actually to program in a test driven way. So once you ran all of the previous
 commands, you will get access to [BusterJS](http://busterjs.org/). Here is how to go on coding:
 
-- Run the BusterJS server.
-  - node_modules/.bin/buster-server
-- Point your server to http://localhost:1111 and capture your browser. Choose one of the following commands or do it just manually.
-  - open http://localhost:1111/capture
-  - firefox http://localhost:1111/capture
-- Minify the code in the src folder and run the tests:
-  - npm test
+```console
+# Run the BusterJS server.
+node_modules/.bin/buster-server
+
+# Open a new bash.
+
+# Point your server to http://localhost:1111 and capture your browser.
+# Choose one of the following commands or do it just manually.
+open http://localhost:1111/capture
+firefox http://localhost:1111/capture
+
+# Minify the code in the src folder and run the tests:
+npm test
+```
 
 ## Update current project
-- Update your `jquery.skeleton` to the latest version of jquery.skeleton.
-- Update your project:
-  - node_modules/.bin/jquery.skeleton update
+Update your `jquery.skeleton` to the latest version of jquery.skeleton.
+
+```console
+# Update your project:
+node_modules/.bin/jquery.skeleton update
+```
 
 ## Adding the MIT license to the project
-- node_modules/.bin/jquery.skeleton license
+```console
+node_modules/.bin/jquery.skeleton license
+```
 
 ## Overview of available commands
-- node_modules/.bin/jquery.skeleton --help
+```console
+node_modules/.bin/jquery.skeleton --help
+```
 
 ## License
 
