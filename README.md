@@ -13,6 +13,9 @@ git clone git://github.com/yourname/jquery.plugin-name.git
 
 # ... or download the folder
 mkdir jquery.plugin-name
+
+# ... and finally go into the folder
+cd jquery.plugin-name
 ```
 
 Afterwards do this:
