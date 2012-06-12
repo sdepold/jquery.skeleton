@@ -5,7 +5,7 @@ A skeleton builder for jquery plugins. Included is BusterJS for testing and Goog
 
 ## Getting started
 
-So first of all you need to create a repository on Github and clone it. Respectively create a new folder. Afterwards do this:
+So first of all you need to create a repository on Github and clone it. Respectively create a new folder.
 
 ```console
 # clone the repo ...
@@ -13,7 +13,11 @@ git clone git://github.com/yourname/jquery.plugin-name.git
 
 # ... or download the folder
 mkdir jquery.plugin-name
+```
 
+Afterwards do this:
+
+```console
 # Initialize npm in that new folder and answer the questions.
 npm init
 
