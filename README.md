@@ -22,18 +22,9 @@ npm install jquery.skeleton --save
 
 # Execute the init process and let the magic happen.
 node_modules/.bin/jquery.skeleton init
+
+# Start coding!
 ```
-
-  - git clone git://github.com/yourname/jquery.plugin-name.git
-  - mkdir jquery.plugin-name
-- Initialize npm in that new folder.
-  - npm init
-- Add `jquery.skeleton` to your package.json.
-  - npm install jquery.skeleton --save
-- Execute the init process and let the magic happen.
-  - node_modules/.bin/jquery.skeleton init
-- Start coding!
-
 ## Test driven development
 The major goal of the skeleton is actually to program in a test driven way. So once you ran all of the previous
 commands, you will get access to [BusterJS](http://busterjs.org/). Here is how to go on coding:
