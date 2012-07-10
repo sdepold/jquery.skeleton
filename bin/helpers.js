@@ -78,8 +78,10 @@ var Helpers = module.exports = {
     var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
       , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
 
-    targetPackageContent.scripts = targetPackageContent.scripts || {}
-    targetPackageContent.scripts.test = "java -jar dist/compiler.jar src/*.js --js_output_file=dist/jquery.`pwd|sed -e 's/.*jquery\\.//'`.min.js && node_modules/.bin/buster-test"
+    targetPackageContent.scripts                = targetPackageContent.scripts || {}
+    targetPackageContent.scripts.test           = "npm run minify && npm run buster-test"
+    targetPackageContent.scripts['buster-test'] = "node_modules/.bin/buster-test"
+    targetPackageContent.scripts.minify         = "java -jar dist/compiler.jar src/*.js --js_output_file=dist/jquery.`pwd|sed -e 's/.*jquery\\.//'`.min.js"
 
     fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
   },
@@ -88,8 +90,10 @@ var Helpers = module.exports = {
     var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
       , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
 
-    targetPackageContent.dependencies = targetPackageContent.dependencies || {}
-    targetPackageContent.dependencies.buster = sourcePackageContent.dependencies.buster
+    targetPackageContent.devDependencies        = targetPackageContent.devDependencies || {}
+    targetPackageContent.devDependencies.buster = sourcePackageContent.dependencies.buster
+
+    delete targetPackageContent.dependencies.buster
 
     fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
   },

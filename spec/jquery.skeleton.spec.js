@@ -78,15 +78,16 @@ describe('jquery.skeleton', function() {
         var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
           , packageJSON    = JSON.parse(packageContent)
 
-        expect(packageJSON.dependencies.buster).toBeDefined()
+        expect(packageJSON.devDependencies.buster).toBeDefined()
       })
 
       it("sets the test command in the package.json", function() {
         var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
           , packageJSON    = JSON.parse(packageContent)
 
-        expect(packageJSON.scripts.test).toMatch(/.*compiler\.jar.*buster-test/)
-        expect(packageJSON.scripts.test.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
+        expect(packageJSON.scripts.test).toMatch(/.*minify.*buster-test/)
+        expect(packageJSON.scripts.minify).toMatch(/.*compiler\.jar/)
+        expect(packageJSON.scripts.minify.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
       })
 
       it("adds the buster.js to the spec folder", function() {
@@ -163,19 +164,20 @@ describe('jquery.skeleton', function() {
         })
       })
 
-      it("sets the test command in package.json", function() {
+      it("sets the test command in the package.json", function() {
         var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
           , packageJSON    = JSON.parse(packageContent)
 
-        expect(packageJSON.scripts.test).toMatch(/.*compiler\.jar.*buster-test/)
-        expect(packageJSON.scripts.test.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
+        expect(packageJSON.scripts.test).toMatch(/.*minify.*buster-test/)
+        expect(packageJSON.scripts.minify).toMatch(/.*compiler\.jar/)
+        expect(packageJSON.scripts.minify.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
       })
 
-      it("adds buster to the dependency list", function() {
+      it("adds buster to the dev dependency list", function() {
         var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
           , packageJSON    = JSON.parse(packageContent)
 
-        expect(packageJSON.dependencies.buster).toBeDefined()
+        expect(packageJSON.devDependencies.buster).toBeDefined()
       })
     })
 
