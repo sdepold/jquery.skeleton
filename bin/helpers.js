@@ -5,7 +5,6 @@ const path    = require("path")
     , version = JSON.parse(fs.readFileSync(__dirname + '/../package.json')).version
     , _       = require("underscore")
     , _s      = require("underscore.string")
-    , AdmZip  = require('adm-zip')
     , wrench  = require("wrench")
 
 var Helpers = module.exports = {
