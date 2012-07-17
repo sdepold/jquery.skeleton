@@ -1,6 +1,5 @@
 const buster = require("buster")
     , fs     = require("fs.extra")
-    , path   = require("path")
     , exec   = require("child_process").exec
     , wrench = require("wrench")
 
@@ -59,19 +58,19 @@ describe('jquery.skeleton', function() {
       })
 
       it("creates a dist folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/dist')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/dist')).toBeTrue()
       })
 
       it("creates a lib folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/lib')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/lib')).toBeTrue()
       })
 
       it("creates a spec folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/spec')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/spec')).toBeTrue()
       })
 
       it("creates a src folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/src')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/src')).toBeTrue()
       })
 
       it("adds busterjs to the package.json", function() {
@@ -91,19 +90,19 @@ describe('jquery.skeleton', function() {
       })
 
       it("adds the buster.js to the spec folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/spec/buster.js')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/spec/buster.js')).toBeTrue()
       })
 
       it("adds the compiler.jar to the dist folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/dist/compiler.jar')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/dist/compiler.jar')).toBeTrue()
       })
 
       it("adds the minified version of jquery to the lib folder", function() {
-        expect(path.existsSync(this.sandboxFolder + '/lib/jquery-1.7.2.min.js')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/lib/jquery-1.7.2.min.js')).toBeTrue()
       })
 
       it("adds the travis setup file to the target project's root", function() {
-        expect(path.existsSync(this.sandboxFolder + '/.travis.yml')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/.travis.yml')).toBeTrue()
       })
 
       describe('spec file', function() {
@@ -112,7 +111,7 @@ describe('jquery.skeleton', function() {
         })
 
         it("adds a dummy spec file", function() {
-          expect(path.existsSync(this.filePath)).toBeTrue()
+          expect(fs.existsSync(this.filePath)).toBeTrue()
         })
 
         it("removes all occurrences of jquery.skeleton", function() {
@@ -132,7 +131,7 @@ describe('jquery.skeleton', function() {
         })
 
         it("adds a dummy src file", function() {
-          expect(path.existsSync(this.filePath)).toBeTrue()
+          expect(fs.existsSync(this.filePath)).toBeTrue()
         })
 
         it("removes all occurrences of jquery.skeleton", function() {
@@ -187,7 +186,7 @@ describe('jquery.skeleton', function() {
       })
 
       it("adds the MIT-LICENSE file", function() {
-        expect(path.existsSync(this.sandboxFolder + '/MIT-LICENSE')).toBeTrue()
+        expect(fs.existsSync(this.sandboxFolder + '/MIT-LICENSE')).toBeTrue()
       })
 
       it("adds a hint for the MIT license to the readme", function() {
