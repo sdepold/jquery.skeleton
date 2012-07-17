@@ -57,7 +57,7 @@ program
       }
     })
 
-    Helpers.addTestCommandToPackageFile()
+    Helpers.addCommandsToPackageFile()
     Helpers.addBusterJsDependencyToPackageFile()
 
     if(env.license) {
@@ -70,7 +70,7 @@ program
   .description("Update some parts of the current project folder. (package.json, closure compiler)")
   .action(function(env, options) {
     // Helpers.ClosureCompiler.setup()
-    Helpers.addTestCommandToPackageFile()
+    Helpers.addCommandsToPackageFile()
     Helpers.addBusterJsDependencyToPackageFile()
   })
 

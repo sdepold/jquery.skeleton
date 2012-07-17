@@ -74,14 +74,25 @@ var Helpers = module.exports = {
     fs.writeFileSync(file, content)
   },
 
-  addTestCommandToPackageFile: function() {
+  addCommandsToPackageFile: function() {
     var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
       , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
+      , commands = {
+          "test": "npm run minify && npm run buster-test",
+          "buster-test": "node_modules/.bin/buster-test",
+          "minify": "java -jar dist/compiler.jar src/*.js --js_output_file=dist/jquery.`pwd|sed -e 's/.*jquery\\.//'`.min.js",
+          "buster-capture": "(npm run buster-server &) && sleep 2 && npm run buster-capture-browser",
+          "buster-capture-browser": "type -P open &>/dev/null && open 'http://localhost:1111/capture' || firefox 'http://localhost:1111/capture'",
+          "buster-server": "node_modules/.bin/buster-server"
+        }
 
-    targetPackageContent.scripts                = targetPackageContent.scripts || {}
-    targetPackageContent.scripts.test           = "npm run minify && npm run buster-test"
-    targetPackageContent.scripts['buster-test'] = "node_modules/.bin/buster-test"
-    targetPackageContent.scripts.minify         = "java -jar dist/compiler.jar src/*.js --js_output_file=dist/jquery.`pwd|sed -e 's/.*jquery\\.//'`.min.js"
+    targetPackageContent.scripts = targetPackageContent.scripts || {}
+
+    for(var commandName in commands) {
+      var command = commands[commandName]
+
+      targetPackageContent.scripts[commandName] = command
+    }
 
     fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
   },
