@@ -97,16 +97,44 @@ var Helpers = module.exports = {
     fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
   },
 
-  addBusterJsDependencyToPackageFile: function() {
+  adaptCommandsForCoffeeScriptInPackageFile: function() {
+    var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
+      , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
+      , commands = {
+          "build": "mkdir -p build && node_modules/.bin/coffee --compile --output build src && if [ -f src/*.js ]; then `cp src/*js build`; fi",
+          "minify": "npm run build && java -jar dist/compiler.jar build/*.js --js_output_file=dist/jquery.`pwd|sed -e 's/.*jquery\\.//'`.min.js",
+          "test": "npm run minify && npm run buster-test"
+        }
+
+    targetPackageContent.scripts = targetPackageContent.scripts || {}
+
+    for(var commandName in commands) {
+      var command = commands[commandName]
+
+      targetPackageContent.scripts[commandName] = command
+    }
+
+    fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
+  },
+
+  addDependencyToPackageFile: function(dependency) {
     var sourcePackageContent = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
       , targetPackageContent = JSON.parse(fs.readFileSync(process.cwd() + '/package.json'))
 
     targetPackageContent.devDependencies        = targetPackageContent.devDependencies || {}
-    targetPackageContent.devDependencies.buster = sourcePackageContent.dependencies.buster
+    targetPackageContent.devDependencies[dependency] = sourcePackageContent.dependencies[dependency]
 
-    delete targetPackageContent.dependencies.buster
+    delete targetPackageContent.dependencies[dependency]
 
     fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(targetPackageContent, null, 2))
+  },
+
+  addBusterJsDependencyToPackageFile: function() {
+    this.addDependencyToPackageFile("buster")
+  },
+
+  addCoffeeScriptDependencyToPackageFile: function() {
+    this.addDependencyToPackageFile("coffee-script")
   },
 
   addTravisConfig: function() {

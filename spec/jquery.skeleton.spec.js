@@ -148,6 +148,33 @@ describe('jquery.skeleton', function() {
       })
     })
 
+    describe('init --coffee', function() {
+      before(function(done) {
+        execBinaryCommand.call(this, 'init --coffee', done)
+      })
+
+      it("doesn't throw an error", function() {
+        expect(this.err).toBeNull()
+      })
+
+      it("adds coffee-script to the package.json", function() {
+        var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
+          , packageJSON    = JSON.parse(packageContent)
+
+        expect(packageJSON.devDependencies["coffee-script"]).toBeDefined()
+      })
+
+      it("sets the test command in the package.json", function() {
+        var packageContent = fs.readFileSync(this.sandboxFolder + '/package.json').toString()
+          , packageJSON    = JSON.parse(packageContent)
+
+        expect(packageJSON.scripts.build).toMatch(/.*node_modules\/.bin\/coffee --compile/)
+        expect(packageJSON.scripts.test).toMatch(/.*minify.*buster-test/)
+        expect(packageJSON.scripts.minify).toMatch(/.*npm run build.*compiler\.jar/)
+        expect(packageJSON.scripts.minify.indexOf("sed -e 's/.*jquery\\.//'`.min.js")).not.toEqual(-1)
+      })
+    })
+
     describe('update', function() {
       before(function(done) {
         var self = this

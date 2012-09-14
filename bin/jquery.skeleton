@@ -14,6 +14,7 @@ program
   .command('init')
   .description("Initializes the current project folder. You'll get TDD, minification, folder structure, ...")
   .option('-l, --license', "Add the MIT license to the project folder and the README.")
+  .option('-c, --coffee', "Add support for CoffeeScript.")
   .action(function(env) {
     var folders = ['dist', 'lib', 'spec', 'src']
     var files   = [
@@ -33,10 +34,10 @@ program
           Helpers.replaceSkeletonInFile(process.cwd() + '/spec/jquery.' + Helpers.getTargetProjectName() + '.spec.js')
         }
       }, {
-        src: 'templates/src/jquery.skeleton.js',
-        target: 'src/jquery.' + Helpers.getTargetProjectName() + '.js',
+        src: 'templates/src/jquery.skeleton' + (env.coffee ? '.coffee' : '.js'),
+        target: 'src/jquery.' + Helpers.getTargetProjectName() + (env.coffee ? '.coffee' : '.js'),
         callback: function() {
-          Helpers.replaceSkeletonInFile(process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + '.js')
+          Helpers.replaceSkeletonInFile(process.cwd() + '/src/jquery.' + Helpers.getTargetProjectName() + (env.coffee ? '.coffee' : '.js'))
         }
       }, {
         src: '.travis.yml',
@@ -62,6 +63,11 @@ program
 
     if(env.license) {
       Helpers.License.setup()
+    }
+
+    if(env.coffee) {
+      Helpers.addCoffeeScriptDependencyToPackageFile()
+      Helpers.adaptCommandsForCoffeeScriptInPackageFile()
     }
   })
 
