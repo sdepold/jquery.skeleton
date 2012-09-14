@@ -27,7 +27,7 @@ npm init
 # Add jquery.skeleton to your package.json.
 npm install jquery.skeleton --save
 
-# Execute the init process and let the magic happen.
+# Execute the init process and let the magic happen. (Use `--coffee` option if you want to enable CoffeeScript support)
 node_modules/.bin/jquery.skeleton init
 
 # Start coding!
@@ -69,6 +69,15 @@ node_modules/.bin/jquery.skeleton license
 ```console
 node_modules/.bin/jquery.skeleton --help
 ```
+
+## CoffeeScript support
+To enable CoffeeScript support run `init` with the `--coffee` option:
+
+```console
+node_modules/.bin/jquery.skeleton init --coffee
+```
+
+You will then be able to use CoffeeScript in the `src` folder. When you run `npm test` your CoffeeScript code will be compiled and the resulting JavaScript minified (but you can still find the non-minified JavaScript files in the `build` folder).
 
 ## License
 
